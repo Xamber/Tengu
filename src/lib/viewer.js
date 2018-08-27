@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Card from './card';
+import {shuffleArray} from './utils';
 
 const TIMEOUT = 1300;
 
 export default class Viewer extends Component {
     constructor(props) {
         super(props)
+        this.ref = React.createRef();
         this.dict = props.dict;
         this.state = {
             "rus": ["Привет!"],
@@ -14,15 +16,14 @@ export default class Viewer extends Component {
         }
 
         this.pickNew = this.pickNew.bind(this);
+        this.handleTouch = this.handleTouch.bind(this);
+        this.handleTouchEnd = this.handleTouchEnd.bind(this);
 
-        this._keys = Object.keys(this.dict);
-        for (let i = this._keys.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [this._keys[i], this._keys[j]] = [this._keys[j], this._keys[i]];
-        }
+        this._keys = Object.keys(this.dict)
+        shuffleArray(this.dict);
+
         this.next = 0;
-
-        setInterval(this.pickNew, TIMEOUT)
+        this.ticker = setInterval(this.pickNew, TIMEOUT)
     }
 
     pickNew() {
@@ -35,9 +36,23 @@ export default class Viewer extends Component {
         this.next++;
     }
 
+    handleTouch() {
+        clearInterval(this.ticker);
+    }
+
+    handleTouchEnd() {
+        this.pickNew()
+        this.ticker = setInterval(this.pickNew, TIMEOUT)
+    }
+
+    componentDidMount() {
+        this.ref.current.addEventListener("touchstart", this.handleTouch, false);
+        this.ref.current.addEventListener("touchend", this.handleTouchEnd, false);
+    }
+
     render() {
         return (
-            <div className="viewer">
+            <div className="viewer" ref={this.ref}>
                 <Card eng={this.state.eng} rus={this.state.rus} usage={this.state.usage} />
             </div>
         )    
