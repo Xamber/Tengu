@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Card from './card';
-import {shuffleArray} from './utils';
 
-const TIMEOUT = 1500;
+const TIMEOUT = 1700;
 
 export default class Viewer extends Component {
     constructor(props) {
@@ -21,15 +20,10 @@ export default class Viewer extends Component {
         }
 
         this.ref = React.createRef();
-
-        this.dict = props.dict;
-        this._keys = Object.keys(this.dict)
-        
-        shuffleArray(this._keys);
     }
 
     pickNew() {
-        let word = this.dict[this._keys[this.state.next]]
+        let word = this.props.dict[this.props.keys[this.state.next]]
         this.setState({
             "rus": word.rus,
             "eng":  word.eng,
