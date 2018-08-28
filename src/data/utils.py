@@ -1,10 +1,11 @@
 from bs4 import BeautifulSoup
 import json
+import glob
 
 HTMLFile = "english_words.html"
 JSONFile = "english_words.json"
-GOTBook = "Harry Potter and the Sorcerer's Stone.txt"
-
+Books = glob.glob("*.txt")
+print("Books: ", Books)
 
 def create_dictonary(soup):
     data = {}
@@ -24,15 +25,17 @@ with open(HTMLFile, "r", encoding='utf-8') as f:
 
 dictonary = create_dictonary(soup)
 
-with open(GOTBook, "r", encoding='utf-8') as f:
-    for line in f.readlines():
-        if line.count(".") != 1 or len(line) < 10 or len(line) > 150:
-            continue
-        words = line.split(" ")
-        for w in words:
-            if dictonary.get(w, None) and len(dictonary[w]["usage"]) < 3:
-                dictonary[w]["usage"].append(line)
-                print(len(line), w, " = ", line)
+for f in Books:
+    with open(f, "r", encoding='utf-8') as f:
+        for line in f.readlines():
+            line = line.strip()
+            if not line or line[0] != line[0].title() or line.count(".") < 1 or line[-1] not in [".", '"', "?"] or len(line) < 10 or len(line) > 100:
+                continue
+            words = line.split(" ")
+            for w in words:
+                if dictonary.get(w, None) and len(dictonary[w]["usage"]) < 3:
+                    dictonary[w]["usage"].append(line)
+                    print(len(line), w, " = ", line)
 
 counter = 0
 for k, v in dictonary.items():
