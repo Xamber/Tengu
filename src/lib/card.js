@@ -1,11 +1,23 @@
 import React, { Component } from 'react';
 
+const UsageCommon = (props) => (
+    <span>{props.word} </span>
+)
+
+const UsageHighlated = (props) => (
+    <b>{props.word} </b>
+)
+
+const Usage = (props) => (
+    props.word===props.eng ? <UsageHighlated word={props.word} /> : <UsageCommon word={props.word} />
+)
+
+
 export default class Card extends Component {
     render() {
-
-        const handler = (word) => (word==this.props.eng ? <b>{word} </b> : <span>{word} </span>)
-
-        let usage = this.props.usage.split(" ").map(handler)
+        let usage = this.props.usage.split(" ").map(
+            (word) => (<Usage word={word} eng={this.props.eng} />)
+        )
 
         return (
             <div className="card">
