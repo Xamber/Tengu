@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 
-const UsageCommon = (props) => (
-    <span>{props.word} </span>
-)
+const Usage = function(props) {
+    if (props.word === props.eng) {
+        return <span className="highlighted">{props.word} </span>
+    }
+    return <span>{props.word} </span>
+}
 
-const UsageHighlated = (props) => (
-    <b>{props.word} </b>
-)
-
-const Usage = (props) => (
-    props.word===props.eng ? <UsageHighlated word={props.word} /> : <UsageCommon word={props.word} />
-)
-
+class CardWord extends Component {
+    render() {
+        let className = "card-word card-word__" + this.props.className
+        return (
+            <div className={className}>
+                <p>{this.props.body}</p>
+            </div>
+        )
+    }
+}
 
 export default class Card extends Component {
     render() {
@@ -21,15 +26,9 @@ export default class Card extends Component {
 
         return (
             <div className="card">
-                <div className="card-word card-word__english">
-                    {this.props.eng}
-                </div>
-                <div className="card-word card-word__russian">
-                    {this.props.rus.join(" / ")}
-                </div>
-                <div className="card-word card-word__usage">
-                    <p>{usage}</p>
-                </div>
+                <CardWord body={this.props.eng} className="english" />
+                <CardWord body={this.props.rus.join(" / ")} className="russian" />
+                <CardWord body={usage} className="usage" />
             </div>
         )
     }
