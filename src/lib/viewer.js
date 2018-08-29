@@ -9,6 +9,7 @@ export default class Viewer extends Component {
         this.handleTouch = this.handleTouch.bind(this);
 
         this.state = {
+            "id": -1,
             "rus": ["Привет!"],
             "eng": "Hello!",
             "usage": "Fast English words",
@@ -21,6 +22,7 @@ export default class Viewer extends Component {
     pickNew() {
         let word = this.props.dict[this.props.keys[this.state.next]]
         this.setState({
+            "id": word.id,
             "rus": word.rus,
             "eng":  word.eng,
             "usage": word.usage ? word.usage[0] : "",
@@ -39,7 +41,7 @@ export default class Viewer extends Component {
     render() {
         return (
             <div className="viewer" ref={this.ref}>
-                <Card eng={this.state.eng} rus={this.state.rus} usage={this.state.usage} />
+                <Card eng={this.state.eng} id={this.state.id} rus={this.state.rus} usage={this.state.usage} />
             </div>
         )    
     }

@@ -16,7 +16,7 @@ const Usage = (props) => (
 export default class Card extends Component {
     render() {
         let usage = this.props.usage.split(" ").map(
-            (word) => (<Usage word={word} eng={this.props.eng} />)
+            (word, index) => (<Usage key={index} word={word} eng={this.props.eng} />)
         )
 
         return (
