@@ -1,37 +1,17 @@
 import React, { Component } from 'react';
 import Card from './card';
+import {store, ConnectStore} from './store';
 
-export default class Viewer extends Component {
+export default class Viewer extends ConnectStore(Component, store, ["id", "rus", "eng", "usage", "next", "pickNew"]) {
     constructor(props) {
         super(props)
-        
-        this.pickNew = this.pickNew.bind(this);
+    
         this.handleTouch = this.handleTouch.bind(this);
-
-        this.state = {
-            "id": -1,
-            "rus": ["Привет!"],
-            "eng": "Hello!",
-            "usage": "Fast English words",
-            "next": 0,
-        }
-
         this.ref = React.createRef();
     }
 
-    pickNew() {
-        let word = this.props.dict[this.props.keys[this.state.next]]
-        this.setState({
-            "id": word.id,
-            "rus": word.rus,
-            "eng":  word.eng,
-            "usage": word.usage ? word.usage[0] : "",
-            "next": this.state.next + 1,
-        });
-    }
-
     handleTouch() {
-        this.pickNew()
+        this.state.pickNew()
     }
 
     componentDidMount() {
