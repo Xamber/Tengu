@@ -48,7 +48,7 @@ export default class Viewer extends Component {
                 <Card color="#7d4373">
                     <Rus body={this.state.rus} />
                 </Card>
-                <Card color="#a03232" fontSize="13px" flex="130px 0 0">
+                <Card color="#a03232" fontSize="15px" flex="130px 0 0">
                     <Usage body={this.state.usage} highlight={this.state.eng} />
                 </Card>
             </div>
