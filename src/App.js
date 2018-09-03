@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Viewer from './components/viewer'
+import Viewer from './components/viewer/viewer'
 import Dictionary from './data/english_words.json';
 
 const initialize = function (dict) {
@@ -20,8 +20,6 @@ const {dict, keys} = initialize(Dictionary)
 
 class App extends Component {
   render() {
-
-    console.log(keys, dict)
     return (
       <Viewer keys={keys} dict={dict}></Viewer>
     );

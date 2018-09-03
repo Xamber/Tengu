@@ -1,5 +1,19 @@
 import React, { Component } from 'react';
-import Card from './card';
+import Card from '../card/card';
+
+const Usage = function(props) {
+    return props.body.split(" ").map(
+        (word, index) => (<span key={index} className={word === props.highlight ? "highlighted": ""}>{word} </span>)
+    )
+}
+
+const Eng = function(props) {
+    return <span>{props.body}</span>
+}
+
+const Rus = function(props) {
+    return <span>{props.body.join(" / ")}</span>
+}
 
 export default class Viewer extends Component {
     constructor(props) {
@@ -41,7 +55,17 @@ export default class Viewer extends Component {
     render() {
         return (
             <div className="viewer" ref={this.ref}>
-                <Card eng={this.state.eng} id={this.state.id} rus={this.state.rus} usage={this.state.usage} />
+                <div className="card">
+                    <Card body={this.state.eng} className="english" >
+                        <Eng body={this.state.eng} />
+                    </Card>
+                    <Card body={this.state.rus.join(" / ")} className="russian">
+                        <Rus body={this.state.rus} />
+                    </Card>
+                    <Card  className="usage">
+                        <Usage body={this.state.usage} highlight={this.state.eng} />
+                    </Card>
+                </div>
             </div>
         )    
     }
