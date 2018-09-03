@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import Viewer from './components/viewer/viewer'
 import Dictionary from './data/english_words.json';
 

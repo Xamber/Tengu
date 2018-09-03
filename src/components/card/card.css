@@ -1,0 +1,15 @@
+.card {
+    flex: 33% 1 1;
+    padding: 20px;
+    color: white;
+  
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+  
+  .highlighted {
+    font-weight: 800;
+  }
