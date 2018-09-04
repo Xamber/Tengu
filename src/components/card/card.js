@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import './card.css';
 
-export const Usage = function(props) {
-    return props.body.split(" ").map(
-        (word, index) => (<span key={index} className={word === props.highlight ? "highlighted": ""}>{word} </span>)
+export const Usage = function (props) {
+
+    if (!props.body) return ""
+
+    return props.body[0].split(" ").map(
+        (word, index) => (<span key={index} className={word === props.highlight ? "highlighted" : ""}>{word} </span>)
     )
 }
 
-export const Eng = function(props) {
+export const Eng = function (props) {
     return <span>{props.body}</span>
 }
 
-export const Rus = function(props) {
+export const Rus = function (props) {
     return <span>{props.body.join(" / ")}</span>
 }
 
