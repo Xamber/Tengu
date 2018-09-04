@@ -5,6 +5,8 @@ import Dictionary from './data/english_words.json';
 import { initialize } from './utils/service'
 import { Storage } from './utils/storage'
 
+import './App.css';
+
 const WORDS_BY_SESSION = 20;
 const INIT_STATE = {
   id: -1,
@@ -12,8 +14,16 @@ const INIT_STATE = {
   eng: "Hello!",
   usage: ["Fast English words"],
   next: 1,
-  showed: "Times of apeears",
-  knowed: "Already known"
+  showed: "Times of appears",
+  knowed: "Already known",
+  power: 0
+}
+
+const Notifier = (props) => {
+  let style = {
+    opacity: props.opacity
+  }
+  return <div style={style} className="notifier"> 👍 </div>
 }
 
 class App extends Component {
@@ -24,7 +34,7 @@ class App extends Component {
     const { dict, keys } = initialize(Dictionary)
 
     this._dict = dict
-    this._keys = keys
+    this._keys = keys.slice(0, WORDS_BY_SESSION+1)
     this.database = new Storage("v1")
 
     this.state = INIT_STATE
@@ -32,6 +42,7 @@ class App extends Component {
     this.pickPrev = this.pickPrev.bind(this)
     this.changed = this.changed.bind(this)
     this.setAsKnown = this.setAsKnown.bind(this)
+    this.forceChanged = this.forceChanged.bind(this)
   }
 
   changed() {
@@ -58,11 +69,19 @@ class App extends Component {
   setAsKnown() {
     this.database.setAsKnown(this.state.id)
     this.changed()
+    this.setState({power: 0})
+  }
+
+  forceChanged(power) {
+    this.setState({power: power})
   }
 
   render() {
     return (
-      <Viewer {...this.state} pickNext={this.pickNext} pickPrev={this.pickPrev} setAsKnown={this.setAsKnown}></Viewer>
+      <div>
+          <Notifier opacity={this.state.power} />
+          <Viewer {...this.state} pickNext={this.pickNext} pickPrev={this.pickPrev} setAsKnown={this.setAsKnown} forceChanged={this.forceChanged}></Viewer>
+      </div>
     );
   }
 }

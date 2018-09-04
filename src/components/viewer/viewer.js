@@ -13,6 +13,7 @@ export default class Viewer extends Component {
 
         this.touch.on("left", this.props.pickPrev)
         this.touch.on("right", this.props.pickNext)
+        this.touch.on("force", this.props.forceChanged)
         this.touch.on("force_done", this.props.setAsKnown)
     }
 
