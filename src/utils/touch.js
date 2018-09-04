@@ -4,6 +4,7 @@ const UP = "up"
 const DOWN = "down"
 const SINGLE = "single"
 const FORCE = "force"
+const FORCE_DONE = "force_done"
 
 export default class Touch {
 
@@ -17,12 +18,13 @@ export default class Touch {
         
         this.on = this.on.bind(this)
 
-        this[RIGHT] = () => { console.log(RIGHT) }
-        this[LEFT] = () => { console.log(LEFT) }
-        this[UP] = () => { console.log(UP) }
-        this[DOWN] = () => { console.log(DOWN) }
-        this[SINGLE] = () => { console.log(SINGLE) }
-        this[FORCE] = () => { console.log(FORCE) }
+        this[RIGHT] = () => {}
+        this[LEFT] = () => {}
+        this[UP] = () => {}
+        this[DOWN] = () => {}
+        this[SINGLE] = () => {}
+        this[FORCE] = () => {}
+        this[FORCE_DONE] = () => {}
 
         this.configure = (elem) => {
             elem.addEventListener("touchstart", this.handleTouchStart, false);
@@ -37,6 +39,9 @@ export default class Touch {
         this.handleTouchForceChange = (evt) => {
             this.power = evt.changedTouches[0].force
             this[FORCE](this.power)
+            if (this.power >= 1) {
+                this[FORCE_DONE]()
+            }
         } 
 
         this.handleTouchEnd = (evt) => {
@@ -60,7 +65,7 @@ export default class Touch {
     }
 
     on(evt, handler) {
-        if (evt === RIGHT || evt === LEFT || evt === UP || evt === DOWN || evt === SINGLE || evt === FORCE) {
+        if (evt === RIGHT || evt === LEFT || evt === UP || evt === DOWN || evt === SINGLE || evt === FORCE || evt === FORCE_DONE) {
             this[evt] = handler
         }
     }

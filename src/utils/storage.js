@@ -15,5 +15,16 @@ export class Storage {
             value = (value === null) ? 0 : parseInt(value, 10)
             return value
         }
+
+        this.setAsKnown = (_id) => {
+            let key = `${this.prefix}known:${_id}`
+            this.database.setItem(key, "known")
+        }
+
+        this.getKnown = (_id) => {
+            let key = `${this.prefix}known:${_id}`
+            let value = this.database.getItem(key) === "known"
+            return value ? "Yes" : "No"
+        }
     }
 }

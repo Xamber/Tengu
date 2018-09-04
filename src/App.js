@@ -12,6 +12,8 @@ const INIT_STATE = {
   eng: "Hello!",
   usage: ["Fast English words"],
   next: 1,
+  showed: "Times of apeears",
+  knowed: "Already known"
 }
 
 class App extends Component {
@@ -29,11 +31,17 @@ class App extends Component {
     this.pickNext = this.pickNext.bind(this)
     this.pickPrev = this.pickPrev.bind(this)
     this.changed = this.changed.bind(this)
+    this.setAsKnown = this.setAsKnown.bind(this)
   }
 
   changed() {
     let word = this._dict[this._keys[this.state.next]]
-    this.setState({ ...word, next: this.state.next})
+    this.setState({
+       ...word,
+       next: this.state.next,
+       showed: this.database.getHistory(this.state.id),
+       knowed: this.database.getKnown(this.state.id)
+    })
     this.database.addhistory(this.state.id)
   }
 
@@ -47,9 +55,14 @@ class App extends Component {
     this.changed()
   }
 
+  setAsKnown() {
+    this.database.setAsKnown(this.state.id)
+    this.changed()
+  }
+
   render() {
     return (
-      <Viewer {...this.state} pickNext={this.pickNext} pickPrev={this.pickPrev}></Viewer>
+      <Viewer {...this.state} pickNext={this.pickNext} pickPrev={this.pickPrev} setAsKnown={this.setAsKnown}></Viewer>
     );
   }
 }

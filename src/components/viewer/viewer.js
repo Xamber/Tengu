@@ -13,10 +13,7 @@ export default class Viewer extends Component {
 
         this.touch.on("left", this.props.pickPrev)
         this.touch.on("right", this.props.pickNext)
-
-        this.touch.on("force", (power) => {
-            this.setState({power: power})
-        })
+        this.touch.on("force_done", this.props.setAsKnown)
     }
 
     componentDidMount() {
@@ -36,7 +33,7 @@ export default class Viewer extends Component {
                     <Usage body={this.props.usage} highlight={this.props.eng} />
                 </Card>
                 <Card color="#000000" fontSize="8px" flex="5px 0 0">
-                    {this.state.power} | {this.props.next} / 20
+                    Knowed: {this.props.knowed} | {this.props.next} / 20 | Showed: {this.props.showed}
                 </Card>
             </div>
         )
