@@ -3,6 +3,7 @@ import Viewer from './components/viewer/viewer'
 import Dictionary from './data/english_words.json';
 
 import { initialize } from './utils/service'
+import { Storage } from './utils/storage'
 
 const WORDS_BY_SESSION = 20;
 const INIT_STATE = {
@@ -22,26 +23,33 @@ class App extends Component {
 
     this._dict = dict
     this._keys = keys
-    this._localStorage = window.localStorage
+    this.database = new Storage("v1")
 
     this.state = INIT_STATE
-    this.pick = this.pick.bind(this)
+    this.pickNext = this.pickNext.bind(this)
+    this.pickPrev = this.pickPrev.bind(this)
+    this.changed = this.changed.bind(this)
   }
 
-  pick() {
+  changed() {
     let word = this._dict[this._keys[this.state.next]]
+    this.setState({ ...word, next: this.state.next})
+    this.database.addhistory(this.state.id)
+  }
 
-    this.setState({ ...word, next: this.state.next < WORDS_BY_SESSION ? this.state.next + 1 : 1 })
+  pickNext() {
+    this.setState({next: this.state.next < WORDS_BY_SESSION ? this.state.next + 1 : 1 })
+    this.changed()
+  }
 
-    let key = `history:${this.id}`
-    let value = this._localStorage.getItem(key)
-    value = (value === null) ? 0 : parseInt(value, 10)
-    this._localStorage.setItem(key, value + 1)
+  pickPrev() {
+    this.setState({next: this.state.next > 1 ? this.state.next -1 : WORDS_BY_SESSION })
+    this.changed()
   }
 
   render() {
     return (
-      <Viewer {...this.state} pick={this.pick}></Viewer>
+      <Viewer {...this.state} pickNext={this.pickNext} pickPrev={this.pickPrev}></Viewer>
     );
   }
 }

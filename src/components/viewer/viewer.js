@@ -11,7 +11,8 @@ export default class Viewer extends Component {
         this.state = {power: 0}
         this.touch = new Touch(50);
 
-        this.touch.on("single", this.props.pick)
+        this.touch.on("left", this.props.pickPrev)
+        this.touch.on("right", this.props.pickNext)
 
         this.touch.on("force", (power) => {
             this.setState({power: power})

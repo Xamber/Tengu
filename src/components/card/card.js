@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import './card.css';
 
 export const Usage = function (props) {
-
     if (!props.body) return ""
-
     return props.body[0].split(" ").map(
         (word, index) => (<span key={index} className={word === props.highlight ? "highlighted" : ""}>{word} </span>)
     )
