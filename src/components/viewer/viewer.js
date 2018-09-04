@@ -34,7 +34,7 @@ export default class Viewer extends Component {
                     <Usage body={this.props.usage} highlight={this.props.eng} />
                 </Card>
                 <Card color="#000000" fontSize="8px" flex="5px 0 0">
-                    Knowed: {this.props.knowed} | {this.props.next} / 20 | Showed: {this.props.showed}
+                    Knowed: {this.props.knowed} | {this.props.cursor} / {this.props.remain} | Showed: {this.props.showed}
                 </Card>
             </div>
         )

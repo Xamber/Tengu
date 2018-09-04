@@ -13,10 +13,11 @@ const INIT_STATE = {
   rus: ["Привет!"],
   eng: "Hello!",
   usage: ["Fast English words"],
-  next: 1,
+  cursor: 0,
   showed: "Times of appears",
   knowed: "Already known",
-  power: 0
+  power: 0,
+  remain: WORDS_BY_SESSION-1
 }
 
 const Notifier = (props) => {
@@ -34,7 +35,7 @@ class App extends Component {
     const { dict, keys } = initialize(Dictionary)
 
     this._dict = dict
-    this._keys = keys.slice(0, WORDS_BY_SESSION+1)
+    this._keys = keys.slice(0, WORDS_BY_SESSION)
     this.database = new Storage("v1")
 
     this.state = INIT_STATE
@@ -46,34 +47,50 @@ class App extends Component {
   }
 
   changed() {
-    let word = this._dict[this._keys[this.state.next]]
+    let word = this._dict[this._keys[this.state.cursor]]
     this.setState({
-       ...word,
-       next: this.state.next,
-       showed: this.database.getHistory(this.state.id),
-       knowed: this.database.getKnown(this.state.id)
+        ...word,
+        cursor: this.state.cursor,
+        power: 0
     })
+    this.setState({
+      remain: this._keys.length-1,
+      showed: this.database.getHistory(this.state.id),
+      knowed: this.database.getKnown(this.state.id),
+    }) 
     this.database.addhistory(this.state.id)
   }
 
+  startAgain() {
+    const { dict, keys } = initialize(Dictionary)
+    this._dict = dict
+    this._keys = keys.slice(0, WORDS_BY_SESSION)
+  }
+
   pickNext() {
-    this.setState({next: this.state.next < WORDS_BY_SESSION ? this.state.next + 1 : 1 })
+    this.setState({cursor: this.state.cursor < this._keys.length-1 ? this.state.cursor + 1 : 0})
     this.changed()
   }
 
   pickPrev() {
-    this.setState({next: this.state.next > 1 ? this.state.next -1 : WORDS_BY_SESSION })
+    this.setState({cursor: this.state.cursor > 0 ? this.state.cursor - 1 : this._keys.length-1})
     this.changed()
   }
 
   setAsKnown() {
     this.database.setAsKnown(this.state.id)
+    this._keys = this._keys.filter(word => this.database.getKnown(this._dict[word].id) !== "Yes")
+
+    if (this._keys.length < 1) {
+      this.startAgain()
+    }
+
+    if (this.state.cursor > this._keys.length-1) { this.state.cursor = 0 }
     this.changed()
-    this.setState({power: 0})
   }
 
   forceChanged(power) {
-    this.setState({power: power})
+    this.setState({power: power > 0.4 ? power : 0})
   }
 
   render() {
