@@ -25,10 +25,10 @@ class App extends Component {
     this._localStorage = window.localStorage
 
     this.state = INIT_STATE
-    this.pickNext = this.pickNext.bind(this)
+    this.pick = this.pick.bind(this)
   }
 
-  pickNext() {
+  pick() {
     let word = this._dict[this._keys[this.state.next]]
 
     this.setState({ ...word, next: this.state.next < WORDS_BY_SESSION ? this.state.next + 1 : 1 })
@@ -41,7 +41,7 @@ class App extends Component {
 
   render() {
     return (
-      <Viewer {...this.state} pickNext={this.pickNext}></Viewer>
+      <Viewer {...this.state} pick={this.pick}></Viewer>
     );
   }
 }

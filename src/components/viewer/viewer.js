@@ -8,15 +8,18 @@ export default class Viewer extends Component {
     constructor(props) {
         super(props)
         this.ref = React.createRef();
-
+        this.state = {power: 0}
         this.touch = new Touch(50);
 
-        this.touch.on("single", this.props.pickNext)
+        this.touch.on("single", this.props.pick)
+
+        this.touch.on("force", (power) => {
+            this.setState({power: power})
+        })
     }
 
     componentDidMount() {
-        this.ref.current.addEventListener("touchstart", this.touch.handleTouchStart, false);
-        this.ref.current.addEventListener("touchend", this.touch.handleTouchEnd, false);
+        this.touch.configure(this.ref.current)
     }
 
     render() {
@@ -32,7 +35,7 @@ export default class Viewer extends Component {
                     <Usage body={this.props.usage} highlight={this.props.eng} />
                 </Card>
                 <Card color="#000000" fontSize="8px" flex="5px 0 0">
-                    {this.props.next} / 20
+                    {this.state.power} | {this.props.next} / 20
                 </Card>
             </div>
         )
